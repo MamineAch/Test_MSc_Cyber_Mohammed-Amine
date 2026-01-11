@@ -1,0 +1,139 @@
+!
+version 15.1
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+service password-encryption
+!
+hostname Rt-Gw-A
+!
+!
+!
+enable secret 5 $1$mERr$FvtEHZoMWYcQyiOrOMRQu/
+!
+!
+ip dhcp excluded-address 192.168.0.1 192.168.0.9
+ip dhcp excluded-address 192.168.10.1 192.168.10.9
+ip dhcp excluded-address 192.168.20.1 192.168.20.9
+ip dhcp excluded-address 192.168.30.1 192.168.30.9
+!
+ip dhcp pool POOL_ADMIN
+ network 192.168.30.0 255.255.255.0
+ default-router 192.168.30.254
+ dns-server 8.8.8.8
+ip dhcp pool POOL_VOIP
+ network 192.168.0.0 255.255.255.0
+ default-router 192.168.0.254
+ dns-server 8.8.8.8
+ip dhcp pool POOL_WIFI
+ network 192.168.10.0 255.255.255.0
+ default-router 192.168.10.254
+ dns-server 8.8.8.8
+ip dhcp pool POOL_PC
+ network 192.168.20.0 255.255.255.0
+ default-router 192.168.20.254
+ dns-server 8.8.8.8
+!
+!
+!
+no ip cef
+no ipv6 cef
+!
+!
+!
+username admin secret 5 $1$mERr$FvtEHZoMWYcQyiOrOMRQu/
+!
+!
+license udi pid CISCO1941/K9 sn FTX152465T8-
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip ssh version 2
+ip domain-name msc.cyber
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0
+ description Liaison_vers_switch_bur1
+ no ip address
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/0.1
+ description Passerelle_VoIP
+ encapsulation dot1Q 1
+ ip address 192.168.0.254 255.255.255.0
+ ip nat inside
+!
+interface GigabitEthernet0/0.10
+ description Passerelle_Wifi
+ encapsulation dot1Q 10
+ ip address 192.168.10.254 255.255.255.0
+ ip nat inside
+!
+interface GigabitEthernet0/0.20
+ description Passerelle_PC
+ encapsulation dot1Q 20
+ ip address 192.168.20.254 255.255.255.0
+ ip nat inside
+!
+interface GigabitEthernet0/0.30
+ description Passerelle_Admin
+ encapsulation dot1Q 30 native
+ ip address 192.168.30.254 255.255.255.0
+ ip nat inside
+!
+interface GigabitEthernet0/1
+ ip address 8.8.8.254 255.255.255.0
+ ip nat outside
+ duplex auto
+ speed auto
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+ip nat inside source list 1 interface GigabitEthernet0/1 overload
+ip classless
+ip route 0.0.0.0 0.0.0.0 8.8.8.8 
+!
+ip flow-export version 9
+!
+!
+access-list 1 permit 192.168.0.0 0.0.255.255
+!
+banner motd # ACCES RESERVE AU PERSONNEL AUTORISE UNIQUEMENT
+banner motd #
+!
+!
+!
+!
+line con 0
+ password 7 0800564B1B0D1C28405B5E516B
+ logging synchronous
+ login
+!
+line aux 0
+!
+line vty 0 4
+ login local
+line vty 5 15
+ login local
+!
+!
+!
+end
+

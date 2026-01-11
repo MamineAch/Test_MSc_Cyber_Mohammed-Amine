@@ -1,0 +1,88 @@
+!
+version 12.1
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+service password-encryption
+!
+hostname Sw-Bur1-A
+!
+enable secret 5 $1$mERr$FvtEHZoMWYcQyiOrOMRQu/
+!
+!
+!
+ptp clock transparent domain 0 profile default
+!
+username Admin secret 5 $1$mERr$FvtEHZoMWYcQyiOrOMRQu/
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+interface FastEthernet0/1
+!
+interface FastEthernet1/1
+ description Liaison_trunk_vers_routeur
+ switchport trunk native vlan 30
+ switchport mode trunk
+!
+interface FastEthernet2/1
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet3/1
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet4/1
+ switchport access vlan 10
+ switchport mode access
+!
+interface FastEthernet5/1
+ switchport access vlan 10
+ switchport mode access
+!
+interface FastEthernet6/1
+ switchport access vlan 20
+ switchport mode access
+!
+interface FastEthernet7/1
+ switchport access vlan 20
+ switchport mode access
+!
+interface FastEthernet8/1
+ switchport access vlan 30
+ switchport mode access
+!
+interface FastEthernet9/1
+ description Liaison_trunk_vers_switch
+ switchport trunk native vlan 30
+ switchport mode trunk
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan30
+ ip address 192.168.30.1 255.255.255.0
+!
+ip default-gateway 192.168.30.254
+!
+banner motd # ACCEES RESTREINT AU PERSONNEL AUTORISE UNIQUEMENT #
+!
+!
+!
+line con 0
+ logging synchronous
+ login local
+!
+line vty 0 4
+ login local
+line vty 5 15
+ login local
+!
+!
+!
+!
+end
+
